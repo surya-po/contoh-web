@@ -399,6 +399,7 @@ function renderOrderSummary() {
 function sendWhatsAppOrder() {
     const name = document.getElementById('customer-name').value;
     const phone = document.getElementById('customer-phone').value;
+    const address = document.getElementById('customer-address').value;
     const branch = document.getElementById('branch').value;
     const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
     const hasProof = document.getElementById('payment-proof').files.length > 0;
@@ -420,7 +421,7 @@ function sendWhatsAppOrder() {
     message += `*Metode Pembayaran:* ${paymentMethod === 'qris' ? 'QRIS' : 'Bayar di Outlet'}\n`;
 
     if (address) {
-        message += `\n*Catatan:*\n${address}\n`;
+        message += `\n*Alamat/Catatan:*\n${address}\n`;
     }
 
     if (paymentMethod === 'qris' && hasProof) {
@@ -433,7 +434,7 @@ function sendWhatsAppOrder() {
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
     // Open WhatsApp
-    window.open(whatsappUrl, '_blank');
+    window.location.href = whatsappUrl;
 
     // Clear cart after sending
     setTimeout(() => {
@@ -445,10 +446,10 @@ function sendWhatsAppOrder() {
 }
 
 // Initialize based on current page
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.location.pathname.includes('menu.html') || window.location.pathname.endsWith('/')) {
-        initMenuPage();
-    } else if (window.location.pathname.includes('checkout.html')) {
-        initCheckoutPage();
-    }
-});
+const page = window.location.pathname.split('/').pop();
+
+if (page === '' || page === 'index.html' || page === 'menu.html') {
+    initMenuPage();
+} else if (page === 'checkout.html') {
+    initCheckoutPage();
+}
